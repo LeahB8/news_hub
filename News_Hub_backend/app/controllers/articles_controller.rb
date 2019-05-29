@@ -1,9 +1,9 @@
 class ArticlesController < ApplicationController
     def create
-        article = Article.new(article_params)
-        if Article.save
+        article = Article.create(article_params)
+        # if Article.save
             render json: article
-        end
+        # end
     end
 
     def destroy
@@ -15,7 +15,7 @@ class ArticlesController < ApplicationController
 
     private
     def article_params
-        params.require(:article).permit(:title, :content, :image, :user_id)
+        params.require(:article).permit(:title, :content, :image, :author, :url, :user_id)
     end
 
 end

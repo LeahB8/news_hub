@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resources :users, only: [:show]
+  resources :users, only: [:show, :create, :index]
   resources :articles, only: [:create, :destroy]
 
-  get '/:username/articles', to: 'users#articles'
+  get '/articles', to: 'users#articles'
 end

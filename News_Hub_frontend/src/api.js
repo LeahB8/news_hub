@@ -20,12 +20,35 @@
 
 const myServerUrl = 'http://localhost:3000/'
 
-const fetchUserArticles = () => 
-    fetch(myServerUrl + `${user.username}` + '/articles').then(resp => resp.json)
+const fetchUserArticles = username => 
+    fetch(myServerUrl + `${username}` + '/articles').then(resp => resp.json())
+
+const addArticleToList = (article, user) => {
+        fetch(myServerUrl + 'articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            title: article.title,
+            content: article.content,
+            image: article.urlToImage,
+            author: article.author,
+            url: article.url,
+            user_id: user.id
+        })
+    }).then(resp => resp.json()).then(article => console.log(article))
+}
+
+    
+    const createUser = newUser =>
+        fetch(myServerUrl + 'users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser)
+    }).then(resp => resp.json()).then(user => console.log(user))
 
 const deleteArticle = article => 
-fetch(myServerUrl + `${article.id}`, {
-	method: 'DELETE'
+    fetch(myServerUrl + `${article.id}`, {
+        method: 'DELETE'
     }).then(resp => resp.json())
 
 
