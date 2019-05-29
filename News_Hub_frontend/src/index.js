@@ -20,7 +20,8 @@ const loginModal = document.querySelector('#login')
 const loginButton = document.querySelector('#loginBtn')
 const loginForm = document.querySelector('#loginForm')
 
-let currentUserObject = '' // Global current user variable 
+let currentUserId = 1 // Global current user variable 
+let currentUser = {}
 
 
 
@@ -29,7 +30,7 @@ let currentUserObject = '' // Global current user variable
 
 const init = () => {
 
-    loginModal.style.display = "block"
+    // loginModal.style.display = "block"
     enviroDiv.style.display = "none"
     readingDiv.style.display = "none"
     politicsDiv.style.display = "none"
@@ -40,6 +41,11 @@ const init = () => {
     fetchNewPolitics().then(x => addPoliticsArticles(x))
     fetchBritish().then(x => addBritishArticles(x))
     fetchNewSports().then(x => addSportsArticles(x))
+    fetchUser(currentUserId).then(user => {
+        currentUser = user
+        addUserArticles(currentUser)
+    })
+    
 
     // fetchEnviro().then(x => addEnviroArticles(x))
     // fetchPolitics().then(x => addPoliticsArticles(x))
@@ -52,15 +58,7 @@ const init = () => {
 
 
 const addToReadingList = article => {
-    let readingLi = document.createElement('li')
-    readingLi.innerHTML =  `
-        <a href='#' class="w3-hover-text-grey w3-text-black">${article.title}</a>
-        <button class="ui right floated button">X</button><br><br>
-    `
-    addArticleToList(article, currentUserObject)
-    
-    readingLi.querySelector('button').addEventListener('click', () => deleteArticleFromReadingList(readingLi))
-    readingUl.append(readingLi)
+    addArticleToList(article, currentUserId)
    }
 
 
@@ -72,7 +70,7 @@ const addToReadingList = article => {
 
 
 
-   const deleteArticleFromReadingList = readingLi => {
+   const deleteArticleFromReadingList = (readingLi, article) => {
         //client side//    
         readingLi.remove()
         //server side//    
@@ -237,8 +235,8 @@ const renderSportsArticle = article => {
 }
 //-----------------------------------------//
 
-const addUserArticles = articles =>{
-    articles.forEach(article => renderUserArticle(article))
+const addUserArticles = currentUser =>{
+    currentUser.articles.forEach(article => renderUserArticle(article))
 }
 
 const renderUserArticle = article => {
@@ -248,7 +246,7 @@ const renderUserArticle = article => {
         <button class="ui right floated button">X</button><br><br>
     `
     
-    userArticleLi.querySelector('button').addEventListener('click', () => deleteArticleFromReadingList(readingLi))
+    userArticleLi.querySelector('button').addEventListener('click', () => deleteArticleFromReadingList(userArticleLi, article))
     readingUl.append(userArticleLi)
 }
 

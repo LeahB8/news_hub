@@ -19,11 +19,13 @@
 //--------------------------------------------------//
 
 const myServerUrl = 'http://localhost:3000/'
+const usersUrl = 'http://localhost:3000/users/'
+const articlesUrl = 'http://localhost:3000/articles/'
 
-const fetchUserArticles = username => 
-    fetch(myServerUrl + `${username}` + '/articles').then(resp => resp.json())
+const fetchUser = id => 
+    fetch(usersUrl + `${id}`).then(resp => resp.json())
 
-const addArticleToList = (article, user) => {
+const addArticleToList = (article, currentUserId) => {
         fetch(myServerUrl + 'articles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,9 +35,9 @@ const addArticleToList = (article, user) => {
             image: article.urlToImage,
             author: article.author,
             url: article.url,
-            user_id: user.id
+            user_id: currentUserId
         })
-    }).then(resp => resp.json()).then(article => console.log(article))
+    }).then(resp => resp.json()).then(renderUserArticle(article))
 }
 
     
@@ -47,9 +49,11 @@ const addArticleToList = (article, user) => {
     }).then(resp => resp.json()).then(user => console.log(user))
 
 const deleteArticle = article => 
-    fetch(myServerUrl + `${article.id}`, {
-        method: 'DELETE'
-    }).then(resp => resp.json())
+    fetch(articlesUrl + `${article.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({user_id: 0})
+    }).then(resp => console.log(resp.json()))
 
 
 //-----------------------------------------------//
