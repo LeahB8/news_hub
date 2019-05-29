@@ -20,8 +20,8 @@
 
 const myServerUrl = 'http://localhost:3000/'
 
-const fetchServerArticles = () => 
-    fetch(myServerUrl + `${user.username}` + '/articles').then(rep => resp.json)
+const fetchUserArticles = () => 
+    fetch(myServerUrl + `${user.username}` + '/articles').then(resp => resp.json)
 
 const deleteArticle = article => 
 fetch(myServerUrl + `${article.id}`, {
