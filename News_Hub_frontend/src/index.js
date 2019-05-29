@@ -22,10 +22,17 @@ const sportsDiv = document.querySelector('#sports_div')
 // let article_id = null
 
 const init = () => {
+    enviroDiv.style.display = "none"
+    readingDiv.style.display = "none"
+    politicsDiv.style.display = "none"
+    sportsDiv.style.display = "none"
+    britishDiv.style.display = "none"
+
     fetchNewEnviro().then(x => addEnviroArticles(x))
     fetchNewPolitics().then(x => addPoliticsArticles(x))
     fetchBritish().then(x => addBritishArticles(x))
     fetchNewSports().then(x => addSportsArticles(x))
+    fetchUserArticles().then(x => addUserArticles(x))
 
     // fetchEnviro().then(x => addEnviroArticles(x))
     // fetchPolitics().then(x => addPoliticsArticles(x))
@@ -50,19 +57,7 @@ const addToReadingList = article => {
        readingLi.remove()
         //server side//    
         // deleteArticle(article)
-
-        //     //* Client side 
-        //     let button = event.target
-        //     let li = button.parentElement
-        //     li.remove();     
-        //     let pokemon_id = event.target.id
-        //     deletePokemon(pokemon_id)
-        //    }
    }
-
-
-
-
 
 //-----------------------------------------//
 
@@ -208,17 +203,14 @@ const renderSportsArticle = article => {
 //-----------------------------------------//
 
 const renderArticleContent = article => {
-    const iframe = document.querySelector('iframe')
-    iframe.innerHTML = `
+    const articleContent = document.querySelector('#article_content')
+    articleContent.innerHTML = `
         <img src="${article.urlToImage}"/>
-        <h1> ${article.title} </h1>
-        <p>${article.content}</p>
-        <p>${article.author}</p>
+        <br><h1> ${article.title} </h1><br>
+        <p>${article.content}</p><br>
+        <p>Author: ${article.author}</p><br>
         `
 }
-
-
-
 
 //-----------------------------------------//
 
