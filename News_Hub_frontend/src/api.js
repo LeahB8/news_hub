@@ -1,26 +1,30 @@
-const BASE_URL = "https://content.guardianapis.com/search"
-const API_KEY = "&api-key=01244650-1da4-41bc-bd3d-3514057cb4ed"
-const Enviro = "?q=environment"
-const Politics = "?q=politics"
-const Sports = "?q=sports"
+// const BASE_URL = "https://content.guardianapis.com/search"
+// const API_KEY = "&api-key=01244650-1da4-41bc-bd3d-3514057cb4ed"
+// const Enviro = "?q=environment"
+// const Politics = "?q=politics"
+// const Sports = "?q=sports"
 
 
 
-const fetchEnviro = () =>
-fetch(BASE_URL + Enviro + API_KEY).then(resp => resp.json())
+// const fetchEnviro = () =>
+// fetch(BASE_URL + Enviro + API_KEY).then(resp => resp.json())
 
-const fetchPolitics = () =>
-fetch(BASE_URL + Politics + API_KEY).then(resp => resp.json())
+// const fetchPolitics = () =>
+// fetch(BASE_URL + Politics + API_KEY).then(resp => resp.json())
 
-const fetchSports = () =>
-fetch(BASE_URL + Sports + API_KEY).then(resp => resp.json())
+// const fetchSports = () =>
+// fetch(BASE_URL + Sports + API_KEY).then(resp => resp.json())
 
 
 //--------------------------------------------------//
 
+const myServerUrl = 'http://localhost:3000/'
+
+const fetchServerArticles = () => 
+    fetch(myServerUrl + `${user.username}` + '/articles').then(rep => resp.json)
 
 const deleteArticle = article => 
-fetch(BASE_URL + `/${article.id}`, {
+fetch(myServerUrl + `${article.id}`, {
 	method: 'DELETE'
     }).then(resp => resp.json())
 
@@ -29,7 +33,7 @@ fetch(BASE_URL + `/${article.id}`, {
 
 const baseUrl = 'https://newsapi.org/v2/'
 
-const enviro = 'everything?q=environment'
+const enviro = 'everything?q=climate'
 const politics = 'everything?q=politics'
 const sports = 'top-headlines?country=gb&category=sports&sortBy=popularity'
 const british = 'top-headlines?country=gb&sortBy=popularity'
