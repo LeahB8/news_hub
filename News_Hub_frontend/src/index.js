@@ -16,12 +16,21 @@ const politicsDiv = document.querySelector('#politics_div')
 const britishDiv = document.querySelector('#british_div')
 const sportsDiv = document.querySelector('#sports_div')
 
+const loginModal = document.querySelector('#login')
+const loginButton = document.querySelector('#loginBtn')
+const loginForm = document.querySelector('#loginForm')
+
+let currentUserId = 1 // Global current user variable 
+let currentUser = {}
+
+
 
 //-----------------------------------------//
 
-// let article_id = null
 
 const init = () => {
+
+    // loginModal.style.display = "block"
     enviroDiv.style.display = "none"
     readingDiv.style.display = "none"
     politicsDiv.style.display = "none"
@@ -32,7 +41,11 @@ const init = () => {
     fetchNewPolitics().then(x => addPoliticsArticles(x))
     fetchBritish().then(x => addBritishArticles(x))
     fetchNewSports().then(x => addSportsArticles(x))
-    fetchUserArticles().then(x => addUserArticles(x))
+    fetchUser(currentUserId).then(user => {
+        currentUser = user
+        addUserArticles(currentUser)
+    })
+    
 
     // fetchEnviro().then(x => addEnviroArticles(x))
     // fetchPolitics().then(x => addPoliticsArticles(x))
@@ -41,22 +54,27 @@ const init = () => {
 //-----------------------------------------//
 
 
+//-----------------------------------------//
+
+
 const addToReadingList = article => {
-    let readingLi = document.createElement('li')
-    readingLi.innerHTML =  `
-        <a href="${article.content}" target="iframe_a" class="w3-hover-text-grey w3-text-black">${article.title}</a>
-        <button class="ui right floated button">X</button><br><br>
-    `
-    
-    readingLi.querySelector('button').addEventListener('click', () => deleteArticleFromReadingList(readingLi))
-    readingUl.append(readingLi)
+    addArticleToList(article, currentUserId)
    }
 
 
-   const deleteArticleFromReadingList = readingLi => {
-       readingLi.remove()
+   // Function to reassign the Above global function with newly created user.
+   function containUserId(user){
+        currentUserObject = user
+   }
+
+
+
+
+   const deleteArticleFromReadingList = (readingLi, article) => {
+        //client side//    
+        readingLi.remove()
         //server side//    
-        // deleteArticle(article)
+        deleteArticle(article)
    }
 
 //-----------------------------------------//
@@ -124,7 +142,22 @@ const addToReadingList = article => {
     })
 
 
+    loginForm.addEventListener('submit', (event) => {
+            loginModal.style.display = "none"
+            fetchUserArticles(event.target.username.value).then(x => addUserArticles(x))
 
+            const newUser = {
+                username: loginForm.username.value
+            }
+            
+            newUser.readingDiv.style.display = "block"
+
+            createUser(newUser)
+    })
+
+   
+
+    
 
 //-----------------------------------------//
 
@@ -136,7 +169,7 @@ const addEnviroArticles = articles => {
 const renderEnviroArticle = article => {
     let enviroLi = document.createElement('li')
     enviroLi.innerHTML =  `
-        <a href="#" target="iframe_a" class="w3-hover-text-grey w3-text-black">${article.title}</a>
+        <a href="#" class="w3-hover-text-grey w3-text-black">${article.title}</a>
         <button class="ui right floated button">Add</button><br><br>
         
     `
@@ -156,7 +189,7 @@ const renderPoliticsArticle = article => {
 
     let politicsLi = document.createElement('li')
     politicsLi.innerHTML =  `
-    <a href="#" target="iframe_a" class="w3-hover-text-grey w3-text-black">${article.title}</a>
+    <a href="#" class="w3-hover-text-grey w3-text-black">${article.title}</a>
     <button class="ui right floated button">Add</button><br><br>
     `
     politicsLi.querySelector('button').addEventListener('click', () => addToReadingList(article))
@@ -173,7 +206,7 @@ const addBritishArticles = articles => {
 const renderBritishArticle = article => {
     let britishLi = document.createElement('li')
     britishLi.innerHTML =  `
-        <a href="#" target="iframe_a" class="w3-hover-text-grey w3-text-black">${article.title}</a>
+        <a href="#" class="w3-hover-text-grey w3-text-black">${article.title}</a>
         <button class="ui right floated button">Add</button><br><br>
         
     `
@@ -202,12 +235,31 @@ const renderSportsArticle = article => {
 }
 //-----------------------------------------//
 
+const addUserArticles = currentUser =>{
+    currentUser.articles.forEach(article => renderUserArticle(article))
+}
+
+const renderUserArticle = article => {
+    let userArticleLi = document.createElement('li')
+    userArticleLi.innerHTML =  `
+        <a href='#' class="w3-hover-text-grey w3-text-black">${article.title}</a>
+        <button class="ui right floated button">X</button><br><br>
+    `
+    
+    userArticleLi.querySelector('button').addEventListener('click', () => deleteArticleFromReadingList(userArticleLi, article))
+    readingUl.append(userArticleLi)
+}
+
+
+//-----------------------------------------//
+
 const renderArticleContent = article => {
     const articleContent = document.querySelector('#article_content')
     articleContent.innerHTML = `
         <img src="${article.urlToImage}"/>
         <br><h1> ${article.title} </h1><br>
-        <p>${article.content}</p><br>
+        <p>${article.content}</p>
+        <a href="${article.url}">Read more...</a>
         <p>Author: ${article.author}</p><br>
         `
 }
