@@ -29,6 +29,9 @@ class ArticlesController < ApplicationController
         article = Article.find_by(id: params[:id])
         if article 
             article.destroy
+            render json: article
+        else
+            render json: {error: "Article doesn't exist"}
         end
     end
 
