@@ -50,10 +50,9 @@ const addArticleToList = (article, currentUserId) => {
 
 const deleteArticle = article => 
     fetch(articlesUrl + `${article.id}`, {
-        method: 'PATCH',
+        method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({user_id: 0})
-    }).then(resp => console.log(resp.json()))
+    }).then(resp => resp.json())
 
 
 //-----------------------------------------------//
@@ -67,7 +66,6 @@ const british = 'top-headlines?country=gb&sortBy=popularity'
 
 const apiKey = '&apiKey=331279e9301c48ce88b7db14d49e8db8'
 
-// https://newsapi.org/v2/top-headlines?country=us&apiKey=331279e9301c48ce88b7db14d49e8db8
 
 const fetchNewEnviro = () => 
 fetch(baseUrl + enviro + apiKey).then(resp => resp.json())

@@ -15,6 +15,10 @@ const enviroDiv = document.querySelector('#enviro_div')
 const politicsDiv = document.querySelector('#politics_div')
 const britishDiv = document.querySelector('#british_div')
 const sportsDiv = document.querySelector('#sports_div')
+const welcomeDiv = document.querySelector('#welcome')
+const contentDiv = document.querySelector('#article_content')
+
+
 
 const loginModal = document.querySelector('#login')
 const loginButton = document.querySelector('#loginBtn')
@@ -31,11 +35,13 @@ let currentUser = {}
 const init = () => {
 
     // loginModal.style.display = "block"
+    welcomeDiv.style.display = "block"
     enviroDiv.style.display = "none"
     readingDiv.style.display = "none"
     politicsDiv.style.display = "none"
     sportsDiv.style.display = "none"
     britishDiv.style.display = "none"
+    contentDiv.style.display = "none"
 
     fetchNewEnviro().then(x => addEnviroArticles(x))
     fetchNewPolitics().then(x => addPoliticsArticles(x))
@@ -86,6 +92,8 @@ const addToReadingList = article => {
             enviroDiv.style.display = "none"
             politicsDiv.style.display = "none"
             sportsDiv.style.display = "none"
+            welcomeDiv.style.display = "none"
+
 
         } else {
             readingDiv.style.display = "none"
@@ -100,6 +108,8 @@ const addToReadingList = article => {
             readingDiv.style.display = "none"
             politicsDiv.style.display = "none"
             sportsDiv.style.display = "none"
+            welcomeDiv.style.display = "none"
+
         } else {
             enviroDiv.style.display = "none"
         }
@@ -112,6 +122,8 @@ const addToReadingList = article => {
             enviroDiv.style.display = "none"
             readingDiv.style.display = "none"
             sportsDiv.style.display = "none"
+            welcomeDiv.style.display = "none"
+
         } else {
             politicsDiv.style.display = "none"
         }
@@ -124,6 +136,8 @@ const addToReadingList = article => {
             enviroDiv.style.display = "none"
             readingDiv.style.display = "none"
             sportsDiv.style.display = "none"
+            welcomeDiv.style.display = "none"
+
         } else {
             britishDiv.style.display = "none"
         }
@@ -136,6 +150,8 @@ const addToReadingList = article => {
             enviroDiv.style.display = "none"
             politicsDiv.style.display = "none"
             readingDiv.style.display = "none"
+            welcomeDiv.style.display = "none"
+
         } else {
             sportsDiv.style.display = "none"
         }
@@ -255,6 +271,8 @@ const renderUserArticle = article => {
 
 const renderArticleContent = article => {
     const articleContent = document.querySelector('#article_content')
+    contentDiv.style.display = "block"
+
     articleContent.innerHTML = `
         <img src="${article.urlToImage}"/>
         <br><h1> ${article.title} </h1><br>
