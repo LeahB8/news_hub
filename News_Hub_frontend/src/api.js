@@ -1,22 +1,5 @@
-// const BASE_URL = "https://content.guardianapis.com/search"
-// const API_KEY = "&api-key=01244650-1da4-41bc-bd3d-3514057cb4ed"
-// const Enviro = "?q=environment"
-// const Politics = "?q=politics"
-// const Sports = "?q=sports"
 
-
-
-// const fetchEnviro = () =>
-// fetch(BASE_URL + Enviro + API_KEY).then(resp => resp.json())
-
-// const fetchPolitics = () =>
-// fetch(BASE_URL + Politics + API_KEY).then(resp => resp.json())
-
-// const fetchSports = () =>
-// fetch(BASE_URL + Sports + API_KEY).then(resp => resp.json())
-
-
-//--------------------------------------------------//
+//---------------------- fetch requests from rails api ----------------------------//
 
 const myServerUrl = 'http://localhost:3000/'
 const usersUrl = 'http://localhost:3000/users/'
@@ -32,7 +15,7 @@ const addArticleToList = (article, currentUserId) => {
         body: JSON.stringify({
             title: article.title,
             content: article.content,
-            image: article.urlToImage,
+            urlToImage: article.urlToImage,
             author: article.author,
             url: article.url,
             user_id: currentUserId
@@ -41,12 +24,12 @@ const addArticleToList = (article, currentUserId) => {
 }
 
     
-    const createUser = newUser =>
-        fetch(myServerUrl + 'users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newUser)
-    }).then(resp => resp.json()).then(user => console.log(user))
+    // const createUser = newUser =>
+    //     fetch(myServerUrl + 'users', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(newUser)
+    // }).then(resp => resp.json()).then(user => console.log(user))
 
 const deleteArticle = article => 
     fetch(articlesUrl + `${article.id}`, {
@@ -55,7 +38,7 @@ const deleteArticle = article =>
     }).then(resp => resp.json())
 
 
-//-----------------------------------------------//
+//---------------------- fetch requests from external news api -------------------------//
 
 const baseUrl = 'https://newsapi.org/v2/'
 
@@ -68,13 +51,13 @@ const apiKey = '&apiKey=331279e9301c48ce88b7db14d49e8db8'
 
 
 const fetchNewEnviro = () => 
-fetch(baseUrl + enviro + apiKey).then(resp => resp.json())
+    fetch(baseUrl + enviro + apiKey).then(resp => resp.json())
 
 const fetchNewPolitics = () => 
-fetch(baseUrl + politics + apiKey).then(resp => resp.json())
+    fetch(baseUrl + politics + apiKey).then(resp => resp.json())
 
 const fetchNewSports = () => 
-fetch(baseUrl + sports + apiKey).then(resp => resp.json())
+    fetch(baseUrl + sports + apiKey).then(resp => resp.json())
 
 const fetchBritish = () => 
-fetch(baseUrl + british + apiKey).then(resp => resp.json())
+    fetch(baseUrl + british + apiKey).then(resp => resp.json())

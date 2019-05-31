@@ -20,13 +20,14 @@
 
 
   <style>
-        body,h1 {font-family: "Raleway", Arial, sans-serif}
-        h1 {letter-spacing: 6px}
+        body,h1,#home_button {font-family: "Raleway", Arial, sans-serif}
+        h1,#home_button {letter-spacing: 6px}
         h3 {letter-spacing: 2px; font-weight: bold}
         #content_section {margin-left: 200px; margin-right: 200px; margin-bottom: 100px; margin-top: 50px }
         .w3-row-padding img {margin-bottom: 10px}
         #login {padding: 100px; margin: 200px; border: 100px}
         #welcome {padding: 150px}
+        #article_img {margin-top: 20px; margin-bottom: 20px; vertical-align: middle; max-width: 100%; height: auto; display: block; margin-left: auto; margin-right: auto;}
         #header_background,#footer {background-image: url('template/images/bannerEdited.jpg')}
         #reading_div,#enviro_div,#politics_div,#british_div,#sports_div,#article_content {padding: 50px}
         /* #header_background {width: 100%; height:500px; background:url('template/images/banner.jpg')} */
@@ -37,7 +38,7 @@
   <title>News Hub</title>
 
   <header id="header_background" class="w3-panel w3-center w3-opacity w3-grey" style="padding:20px 16px">
-        <h1 class="w3-jumbo">News Hub</h1>
+        <h1><a href="#" id="home_button" class="w3-jumbo w3-hover-text-light-grey w3-text-dark-grey">News Hub</a></h1>
         <h3 class="w3-large">Curate your news world</h3>
         
         <div class="w3-padding-32">
@@ -55,7 +56,7 @@
 
 <body>
 
-    <div id="login" class="ui small modal w3-center">
+    <!-- <div id="login" class="ui small modal w3-center">
             <h2>Login</h2><br><br>
   
             <form id="loginForm"> 
@@ -68,7 +69,7 @@
                 </div> 
               
              </form> 
-    </div>
+    </div> -->
 
     <div id="content_section">
         <div class="w3-light-grey w3-card w3-center" id="welcome">

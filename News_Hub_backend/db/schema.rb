@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 2019_05_29_191610) do
   create_table "articles", force: :cascade do |t|
     t.string "title"
     t.text "content"
-    t.string "image"
+    t.string "urlToImage"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
