@@ -21,6 +21,7 @@ const sportsDiv = document.querySelector('#sports_div')
 const welcomeDiv = document.querySelector('#welcome')
 const contentDiv = document.querySelector('#article_content')
 
+
 // const loginModal = document.querySelector('#login')
 const loginButton = document.querySelector('#loginBtn')
 const loginForm = document.querySelector('#loginForm')
@@ -45,46 +46,13 @@ const init = () => {
         currentUser = user
         addUserArticles(currentUser)
     }).then(fetchCalls)
-   
-    
 }
-
     const fetchCalls = () => {
-        fetchNewEnviro().then(x => {
-            addEnviroArticles(x)
-        })
+        fetchNewEnviro().then(x => addEnviroArticles(x))
         fetchNewPolitics().then(x => addPoliticsArticles(x))
         fetchBritish().then(x => addBritishArticles(x))
         fetchNewSports().then(x => addSportsArticles(x))
     }
-
-
-//------------------- client side create & delete articles ----------------------//
-
-
-
-
-
-   // Function to reassign the Above global function with newly created user.
-//    function containUserId(user){
-//         currentUserObject = user
-//    }
-
-
-   const deleteArticleFromReadingList = (articleLi, article) => {
-        // TODO: remove the artice from currentUser.articles
-
-        //client side//    
-        // articleLi.remove()
-        // if (readingDiv.style.display === "block") {
-        //     articleLi.remove()
-        // }
-        articleToDelete = currentUser.articles.find(article => article.url === articleLi.dataset.url)
-        currentUser.articles = currentUser.articles.filter(article => article.url !== articleLi.dataset.url)
-        addUserArticles(currentUser)
-        //server side//
-        deleteArticle(articleToDelete)
-   }
 
 //--------------------- buttons & event listeners --------------------//
     
@@ -164,13 +132,10 @@ const init = () => {
     // loginForm.addEventListener('submit', (event) => {
     //         loginModal.style.display = "none"
     //         fetchUserArticles(event.target.username.value).then(x => addUserArticles(x))
-
     //         const newUser = {
     //             username: loginForm.username.value
     //         }
-            
     //         newUser.readingDiv.style.display = "block"
-
     //         createUser(newUser)
     // })
 
@@ -179,77 +144,77 @@ const init = () => {
    
 const renderArticle = (article, ul) => {
     let articleLi = document.createElement('li')
-    articleLi.dataset.url = article.url
-
+    articleLi.id = `${article.id}`
     articleLi.innerHTML =  `
     <a href="#" class="w3-hover-text-grey w3-text-black">${article.title}</a>
     <button class="ui right floated button">${ inReadingLi(article) ? "X" : "Add" }</button><br><br>
-    
-`
+    `
     articleLi.querySelector('button').addEventListener('click', () => {
-        // debugger
         if (inReadingLi(article)) {
             deleteArticleFromReadingList(articleLi, article)
             articleLi.querySelector('button').innerText = "Add"
-            // TODO: change button innerHTML to Add
+            // articleLi.querySelector('button').addEventListener
+            //adding separate event listener to button to call this when on their reading list
+
         } else {
-            //server side
             addArticleToList(article, currentUserId)
-            renderArticleContent(article)
             articleLi.querySelector('button').innerText = "X"
-            // TODO: change button innerHTML to X
-            ul.append(articleLi)
+            currentUser.articles = currentUser.articles.filter( article => article.id == articleLi.id )
+
+            readingUl.append(articleLi)
         }
-
-
     })
-    // articleLi.addEventListener('click', () => renderArticleContent(article))
     ul.append(articleLi)
-    // debugger
+
+    articleLi.querySelector('a').addEventListener('click', () => renderArticleContent(article))
 
 
 }
-
 //---------------- checking whether an article is in the user's reading list -----------------//
 
-    const inReadingLi = article => {
-        if (currentUser.articles.map(article => article.url).includes(article.url)) {
-            return true
-        } else {
-            return false
-        }
+const inReadingLi = article => {
+    if (currentUser.articles.map(article => article.url).includes(article.url)) {
+        return true
+    } else {
+        return false
     }
+}
+
+//------------------- delete articles ----------------------//
+
+const deleteArticleFromReadingList = (articleLi, article) => {
+
+    //client side//    
+    if (articleLi.className == "readingListArticle") {
+        debugger
+        articleLi.remove()
+    }
+    currentUser.articles = currentUser.articles.filter( article => article.id != articleLi.id )
+    deleteArticle(article)
+    addUserArticles(currentUser)
+}
 
 //---------------------- rendering environmental articles -------------------//
 
-
 const addEnviroArticles = articles => {
-    enviroUl.innerHTML = ``
-    articles.articles.forEach(article => {
-        renderArticle(article, enviroUl)
-    })
+    articles.articles.forEach(article => renderArticle(article, enviroUl))
 }
 
 //-------------------- rendering politics articles ---------------------//
 
-
 const addPoliticsArticles = articles => {
-    politicsUl.innerHTML = ``
     articles.articles.forEach(article => renderArticle(article, politicsUl))
 }
 
 //------------------ rendering UK articles -----------------------//
 
 const addBritishArticles = articles => {
-    britishUl.innerHTML = ``
     articles.articles.forEach(article => renderArticle(article, britishUl))
 }
 
 //--------------------- rendering sports articles --------------------//
 
-
 const addSportsArticles = articles => {
-    sportsUl.innerHTML = ``
     articles.articles.forEach(article => renderArticle(article, sportsUl))
 }
 
@@ -257,20 +222,21 @@ const addSportsArticles = articles => {
 
 const addUserArticles = currentUser =>{
     readingUl.innerHTML = ``
-    currentUser.articles.forEach(article => renderArticle(article, readingUl))
+    currentUser.articles.forEach(article => renderUserArticle(article))
 }
 
-// const renderUserArticle = article => {
-//     let userArticleLi = document.createElement('li')
-//     userArticleLi.innerHTML =  `
-//         <a href='#' class="w3-hover-text-grey w3-text-black">${article.title}</a>
-//         <button class="ui right floated button">X</button><br><br>
-//     `
+const renderUserArticle = article => {
+    let userArticleLi = document.createElement('li')
+    userArticleLi.className = "readingListArticle"
+    userArticleLi.innerHTML =  `
+        <a href='#' class="w3-hover-text-grey w3-text-black">${article.title}</a>
+        <button class="ui right floated button">X</button><br><br>
+    `
     
-//     userArticleLi.querySelector('button').addEventListener('click', () => deleteArticleFromReadingList(userArticleLi, article))
-//     userArticleLi.addEventListener('click', () => renderArticleContent(article))
-//     readingUl.append(userArticleLi)
-// }
+    userArticleLi.querySelector('button').addEventListener('click', () => deleteArticleFromReadingList(userArticleLi, article))
+    userArticleLi.querySelector('a').addEventListener('click', () => renderArticleContent(article))
+    readingUl.append(userArticleLi)
+}
 
 
 //------------------- rendering article content ----------------------//
@@ -296,8 +262,3 @@ const renderArticleContent = article => {
 
 
 init()
-
-
-
-
-
