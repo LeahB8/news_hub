@@ -20,8 +20,13 @@ const addArticleToList = (article, currentUserId) => {
             url: article.url,
             user_id: currentUserId
         })
-    }).then(resp => resp.json()).then(renderUserArticle(article))
+    }).then(resp => resp.json())
 }
+
+
+//fetchUserArticles
+// do a GET request and get all their articles
+// render all their articles
 
     
     // const createUser = newUser =>
