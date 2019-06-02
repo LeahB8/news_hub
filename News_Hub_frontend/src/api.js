@@ -23,6 +23,12 @@ const addArticleToList = (article, currentUserId) => {
     }).then(resp => resp.json())
 }
 
+const deleteArticle = article => 
+    fetch(articlesUrl + `${article.id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    }).then(resp => resp.json())
+
 
 //fetchUserArticles
 // do a GET request and get all their articles
@@ -36,11 +42,6 @@ const addArticleToList = (article, currentUserId) => {
     //     body: JSON.stringify(newUser)
     // }).then(resp => resp.json()).then(user => console.log(user))
 
-const deleteArticle = article => 
-    fetch(articlesUrl + `${article.id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-    }).then(resp => resp.json())
 
 
 //---------------------- fetch requests from external news api -------------------------//

@@ -22,8 +22,8 @@ const welcomeDiv = document.querySelector('#welcome')
 const contentDiv = document.querySelector('#article_content')
 
 // const loginModal = document.querySelector('#login')
-const loginButton = document.querySelector('#loginBtn')
-const loginForm = document.querySelector('#loginForm')
+// const loginButton = document.querySelector('#loginBtn')
+// const loginForm = document.querySelector('#loginForm')
 
 let currentUserId = 1 
 let currentUser = {}
@@ -45,46 +45,15 @@ const init = () => {
         currentUser = user
         addUserArticles(currentUser)
     }).then(fetchCalls)
-   
-    
 }
 
     const fetchCalls = () => {
-        fetchNewEnviro().then(x => {
-            addEnviroArticles(x)
-        })
-        fetchNewPolitics().then(x => addPoliticsArticles(x))
-        fetchBritish().then(x => addBritishArticles(x))
-        fetchNewSports().then(x => addSportsArticles(x))
+        fetchNewEnviro().then(article => addEnviroArticles(article))
+        fetchNewPolitics().then(article => addPoliticsArticles(article))
+        fetchBritish().then(article => addBritishArticles(article))
+        fetchNewSports().then(article => addSportsArticles(article))
     }
 
-
-//------------------- client side create & delete articles ----------------------//
-
-
-
-
-
-   // Function to reassign the Above global function with newly created user.
-//    function containUserId(user){
-//         currentUserObject = user
-//    }
-
-
-   const deleteArticleFromReadingList = (articleLi, article) => {
-        // TODO: remove the artice from currentUser.articles
-
-        //client side//    
-        // articleLi.remove()
-        // if (readingDiv.style.display === "block") {
-        //     articleLi.remove()
-        // }
-        articleToDelete = currentUser.articles.find(article => article.url === articleLi.dataset.url)
-        currentUser.articles = currentUser.articles.filter(article => article.url !== articleLi.dataset.url)
-        addUserArticles(currentUser)
-        //server side//
-        deleteArticle(articleToDelete)
-   }
 
 //--------------------- buttons & event listeners --------------------//
     
@@ -174,6 +143,18 @@ const init = () => {
     //         createUser(newUser)
     // })
 
+//------------------- client side create & delete articles ----------------------//
+
+
+const deleteArticleFromReadingList = (articleLi, article) => {
+
+    //client side//    
+    articleToDelete = currentUser.articles.find(article => article.url === articleLi.dataset.url)
+    currentUser.articles = currentUser.articles.filter(article => article.url !== articleLi.dataset.url)
+    addUserArticles(currentUser)
+    //server side//
+    deleteArticle(articleToDelete)
+}
 //---------------------- rendering all articles -------------------//
 
    
@@ -182,32 +163,22 @@ const renderArticle = (article, ul) => {
     articleLi.dataset.url = article.url
 
     articleLi.innerHTML =  `
-    <a href="#" class="w3-hover-text-grey w3-text-black">${article.title}</a>
-    <button class="ui right floated button">${ inReadingLi(article) ? "X" : "Add" }</button><br><br>
-    
-`
+    <a href="#article_content" class="w3-hover-text-grey w3-text-black">${article.title}</a>
+    <button class="ui right floated button">${ inReadingLi(article) ? "X" : "Add" }</button><br><br> 
+    `
     articleLi.querySelector('button').addEventListener('click', () => {
-        // debugger
         if (inReadingLi(article)) {
             deleteArticleFromReadingList(articleLi, article)
             articleLi.querySelector('button').innerText = "Add"
-            // TODO: change button innerHTML to Add
         } else {
-            //server side
             addArticleToList(article, currentUserId)
-            renderArticleContent(article)
             articleLi.querySelector('button').innerText = "X"
-            // TODO: change button innerHTML to X
-            ul.append(articleLi)
+            readingUl.append(articleLi)
         }
 
-
     })
-    // articleLi.addEventListener('click', () => renderArticleContent(article))
+    articleLi.querySelector('a').addEventListener('click', () => renderArticleContent(article))
     ul.append(articleLi)
-    // debugger
-
-
 }
 
 //---------------- checking whether an article is in the user's reading list -----------------//
@@ -225,9 +196,7 @@ const renderArticle = (article, ul) => {
 
 const addEnviroArticles = articles => {
     enviroUl.innerHTML = ``
-    articles.articles.forEach(article => {
-        renderArticle(article, enviroUl)
-    })
+    articles.articles.forEach(article => renderArticle(article, enviroUl))
 }
 
 //-------------------- rendering politics articles ---------------------//
@@ -256,7 +225,7 @@ const addSportsArticles = articles => {
 //-------------------- rendering user's articles ---------------------//
 
 const addUserArticles = currentUser =>{
-    readingUl.innerHTML = ``
+    readingUl.innerText = ``
     currentUser.articles.forEach(article => renderArticle(article, readingUl))
 }
 
@@ -287,9 +256,8 @@ const renderArticleContent = article => {
         <a target="_blank" href="${article.url}">Read more...</a>
         <p>Author: ${article.author}</p><br>
         `
-        
-    articleContent.querySelector('button').addEventListener('click', () => contentDiv.style.display = "none")
 
+    articleContent.querySelector('button').addEventListener('click', () => contentDiv.style.display = "none")
 }
 
 //------------------ calling initialise -----------------------//
