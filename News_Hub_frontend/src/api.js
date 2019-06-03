@@ -1,15 +1,15 @@
 
 //---------------------- fetch requests from rails api ----------------------------//
 
-const myServerUrl = 'http://localhost:3000/'
-const usersUrl = 'http://localhost:3000/users/'
-const articlesUrl = 'http://localhost:3000/articles/'
+const myServerUrl = 'https://news-hub-server.herokuapp.com/'
+const usersUrl = 'https://news-hub-server.herokuapp.com/users/'
+const articlesUrl = 'https://news-hub-server.herokuapp.com/articles/'
 
 const fetchUser = id => 
     fetch(usersUrl + `${id}`).then(resp => resp.json())
 
 const addArticleToList = (article, currentUserId) => {
-        fetch(myServerUrl + 'articles', {
+        fetch(articlesUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
