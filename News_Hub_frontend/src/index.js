@@ -43,15 +43,15 @@ const init = () => {
     contentDiv.style.display = "none"
     fetchUser(currentUserId).then(user => {
         currentUser = user
-        addUserArticles(currentUser)
+        updateReadingList()
     }).then(fetchCalls)
 }
 
     const fetchCalls = () => {
-        fetchNewEnviro().then(article => addEnviroArticles(article))
-        fetchNewPolitics().then(article => addPoliticsArticles(article))
-        fetchBritish().then(article => addBritishArticles(article))
-        fetchNewSports().then(article => addSportsArticles(article))
+        fetchNewEnviro().then(addEnviroArticles)
+        fetchNewPolitics().then(addPoliticsArticles)
+        fetchBritish().then(addBritishArticles)
+        fetchNewSports().then(addSportsArticles)
     }
 
 
@@ -146,14 +146,16 @@ const init = () => {
 //------------------- client side create & delete articles ----------------------//
 
 
-const deleteArticleFromReadingList = (articleLi, article) => {
+const deleteArticleFromReadingList = (article) => {
 
-    //client side//    
-    articleToDelete = currentUser.articles.find(article => article.url === articleLi.dataset.url)
-    currentUser.articles = currentUser.articles.filter(article => article.url !== articleLi.dataset.url)
-    addUserArticles(currentUser)
+    //client side//
+    article = currentUser.articles.find(currentArticle => currentArticle.url === article.url)
+    // articleToDelete = currentUser.articles.find(article => article.url === articleLi.dataset.url)
+    currentUser.articles = currentUser.articles.filter(currentArticle => currentArticle.id !== article.id)
+    updateReadingList()
     //server side//
-    deleteArticle(articleToDelete)
+    return deleteArticle(article)
+        // .then(() => addUserArticles(currentUser))
 }
 //---------------------- rendering all articles -------------------//
 
@@ -163,17 +165,30 @@ const renderArticle = (article, ul) => {
     articleLi.dataset.url = article.url
 
     articleLi.innerHTML =  `
-    <a href="#article_content" class="w3-hover-text-grey w3-text-black">${article.title}</a>
-    <button class="ui right floated button">${ inReadingLi(article) ? "X" : "Add" }</button><br><br> 
+        <a href="#article_content" class="w3-hover-text-grey w3-text-black">
+            ${article.title}
+        </a>
+        <button class="ui right floated button">
+            ${ inReadingLi(article) ? "X" : "Add" }
+        </button>
+        <br><br>
     `
     articleLi.querySelector('button').addEventListener('click', () => {
+        // debugger
         if (inReadingLi(article)) {
-            deleteArticleFromReadingList(articleLi, article)
-            articleLi.querySelector('button').innerText = "Add"
+            deleteArticleFromReadingList(article)
+                .then(() => {
+                    articleLi.querySelector('button').innerText = "Add"
+
+                })
         } else {
             addArticleToList(article, currentUserId)
-            articleLi.querySelector('button').innerText = "X"
-            readingUl.append(articleLi)
+                .then((article) => {
+                    articleLi.querySelector('button').innerText = "X"
+                    currentUser.articles.push(article)
+                    updateReadingList()
+                    // readingUl.append(articleLi)
+            })
         }
 
     })
@@ -224,8 +239,8 @@ const addSportsArticles = articles => {
 
 //-------------------- rendering user's articles ---------------------//
 
-const addUserArticles = currentUser =>{
-    readingUl.innerText = ``
+const updateReadingList = () =>{
+    readingUl.innerHTML = ``
     currentUser.articles.forEach(article => renderArticle(article, readingUl))
 }
 
@@ -264,8 +279,3 @@ const renderArticleContent = article => {
 
 
 init()
-
-
-
-
-

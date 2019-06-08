@@ -9,7 +9,7 @@ const fetchUser = id =>
     fetch(usersUrl + `${id}`).then(resp => resp.json())
 
 const addArticleToList = (article, currentUserId) => {
-        fetch(articlesUrl, {
+        return fetch(articlesUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -23,12 +23,12 @@ const addArticleToList = (article, currentUserId) => {
     }).then(resp => resp.json())
 }
 
-const deleteArticle = article => 
-    fetch(articlesUrl + `${article.id}`, {
+const deleteArticle = article => {
+    return fetch(articlesUrl + `${article.id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
     }).then(resp => resp.json())
-
+}
 
 //fetchUserArticles
 // do a GET request and get all their articles
